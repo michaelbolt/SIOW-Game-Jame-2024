@@ -13,6 +13,22 @@ public class PlayerController : MonoBehaviour
     {
         inputActions = new InputActions();
         characterController = GetComponent<CharacterController>();
+
+        // bind debug messages to Actions
+        inputActions.gameplay.move.performed += context =>
+        {
+            Debug.Log("move: " + context.ReadValue<Vector2>());
+        };
+    }
+
+    private void OnEnable()
+    {
+        inputActions.gameplay.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputActions.gameplay.Disable();
     }
 
 
