@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -14,10 +15,19 @@ public class PlayerController : MonoBehaviour
         inputActions = new InputActions();
         characterController = GetComponent<CharacterController>();
 
-        // bind debug messages to Actions
+        // store move input when performed
         inputActions.gameplay.move.performed += context =>
         {
-            Debug.Log("move: " + context.ReadValue<Vector2>());
+            moveInput = context.ReadValue<Vector2>();
+            moveAngle = -Vector2.SignedAngle(Vector2.up, moveInput);
+            moveMagnitude = moveInput.magnitude;
+            //Debug.Log(moveInput + " -> " + moveMagnitude + " @ " + moveAngle);
+        };
+        inputActions.gameplay.move.canceled += context =>
+        {
+            moveInput = Vector2.zero;
+            moveAngle = 0.0f;
+            moveMagnitude = 0.0f;
         };
     }
 
@@ -31,12 +41,49 @@ public class PlayerController : MonoBehaviour
         inputActions.gameplay.Disable();
     }
 
-
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        
+        if (characterController != null)
+        {
+            // rotate Player towards the direction held on the joystick, relative to the Camera view
+            if (moveMagnitude > 0)
+            {
+                // rotate myCamera.forward by moveAngle to resolve the desired direction of travel (in player's joystick frame of reference)
+                Vector3 moveDirection = Quaternion.AngleAxis(moveAngle, Vector3.up) * ProjectCameraForwardOntoXZPlane();
+                float rotationAngle = Vector3.SignedAngle(moveDirection, transform.forward, transform.up);
+                float roationSign = -Mathf.Sign(rotationAngle);
+
+                Debug.Log("rotation ange: " + rotationAngle + ", moveDirection: " + moveDirection);
+
+                //rotate towards moveDirection by the turnRate
+                transform.RotateAround(Vector3.up, roationSign * turnSpeed * Time.deltaTime);
+            }
+
+        }
     }
+
+    #region Movement
+    [Tooltip("Camera to base movement on")]
+    public Camera myCamera;
+
+    [Tooltip("Turning speed of character (deg / sec)")]
+    public float turnSpeed = 5.0f;
+
+    // input values
+    private Vector2 moveInput = Vector2.zero;
+    private float moveAngle = 0.0f;
+    private float moveMagnitude = 0.0f;
+
+    private Vector3 ProjectCameraForwardOntoXZPlane()
+    {
+        // project myCamera.forward into world space
+        Vector3 myCameraForward = myCamera.transform.TransformDirection(Vector3.forward);
+        myCameraForward.y = 0;  // clear y component
+        myCameraForward.Normalize();  // normalize onto x-z plane
+
+        return myCameraForward;
+    }
+    #endregion
 
     #region GIZMOS
     /// <summary>
