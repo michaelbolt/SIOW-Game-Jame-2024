@@ -959,7 +959,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myCamera: {fileID: 185712813}
+  walkSpeed: 5
   turnSpeed: 90
+  gravity: -10
 --- !u!1001 &1100208398
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -44,7 +44,6 @@ public class PlayerController : MonoBehaviour
         {
             if (moveMagnitude > 0)
             {
-                // determine the player's intended direction of travel by rotating myCamera.transform.forward by the
                 // determine the player's intended direction of travel by rotating myCamera.transform.forward by the joystick input angle
                 Vector3 myCameraForwardWorldSpace = Quaternion.AngleAxis(moveAngle, Vector3.up) * ProjectForwardOntoXZPlane(myCamera.transform);
                 float rotationAngle = Vector3.SignedAngle(myCameraForwardWorldSpace, transform.forward, transform.up);
@@ -56,6 +55,10 @@ public class PlayerController : MonoBehaviour
                 characterController.Move(walkSpeed * Time.deltaTime * transform.forward);
             }
 
+            // always apply gravity
+            if (characterController.isGrounded && verticalVelocity < 0.0f) verticalVelocity = 0.0f;
+            else verticalVelocity += gravity;
+            characterController.Move(verticalVelocity * Vector3.up * Time.deltaTime);
         }
     }
 
@@ -68,12 +71,16 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed = 2.0f;
     [Tooltip("Turning speed of character (deg / sec)")]
     public float turnSpeed = 90.0f;
+    [Tooltip("Gravitational Constant (units / sec / sec")]
+    public float gravity = -10.0f;
 
-    // input values
     // inputActionvalues
     private Vector2 moveInput = Vector2.zero;
     private float moveAngle = 0.0f;
     private float moveMagnitude = 0.0f;
+
+    // motion values
+    private float verticalVelocity = 0.0f;
 
     /// <summary>
     /// Project the provided <c>Transform</c>'s <c>forward</c> vector onto the World-space X-Z plane.
