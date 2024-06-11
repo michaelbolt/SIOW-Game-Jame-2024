@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -45,18 +42,15 @@ public class PlayerController : MonoBehaviour
     {
         if (characterController != null)
         {
-            // rotate Player towards the direction held on the joystick, relative to the Camera view
             if (moveMagnitude > 0)
             {
-                // rotate myCamera.forward by moveAngle to resolve the desired direction of travel (in player's joystick frame of reference)
-                Vector3 moveDirection = Quaternion.AngleAxis(moveAngle, Vector3.up) * ProjectCameraForwardOntoXZPlane();
-                float rotationAngle = Vector3.SignedAngle(moveDirection, transform.forward, transform.up);
+                // determine the player's intended direction of travel by rotating myCamera.transform.forward by the
+                Vector3 myCameraForwardWorldSpace = Quaternion.AngleAxis(moveAngle, Vector3.up) * ProjectForwardOntoXZPlane(myCamera.transform);
+                float rotationAngle = Vector3.SignedAngle(myCameraForwardWorldSpace, transform.forward, transform.up);
                 float roationSign = -Mathf.Sign(rotationAngle);
 
-                Debug.Log("rotation ange: " + rotationAngle + ", moveDirection: " + moveDirection);
-
-                //rotate towards moveDirection by the turnRate
-                transform.RotateAround(Vector3.up, roationSign * turnSpeed * Time.deltaTime);
+                //rotate towards myCameraForwardWorldSpace by the 
+                transform.Rotate(Vector3.up, roationSign * turnSpeed * Time.deltaTime);
             }
 
         }
@@ -67,14 +61,19 @@ public class PlayerController : MonoBehaviour
     public Camera myCamera;
 
     [Tooltip("Turning speed of character (deg / sec)")]
-    public float turnSpeed = 5.0f;
+    public float turnSpeed = 90.0f;
 
     // input values
     private Vector2 moveInput = Vector2.zero;
     private float moveAngle = 0.0f;
     private float moveMagnitude = 0.0f;
 
-    private Vector3 ProjectCameraForwardOntoXZPlane()
+    /// <summary>
+    /// Project the provided <c>Transform</c>'s <c>forward</c> vector onto the World-space X-Z plane.
+    /// </summary>
+    /// <param name="objTransform"><c>Transform</c> object to project onto X-Z plane.</param>
+    /// <returns></returns>
+    private Vector3 ProjectForwardOntoXZPlane(Transform objTransform)
     {
         // project myCamera.forward into world space
         Vector3 myCameraForward = myCamera.transform.TransformDirection(Vector3.forward);
@@ -106,8 +105,8 @@ public class PlayerController : MonoBehaviour
                 + new Vector3(0, characterController.stepOffset, 0)     // + stepOffset -> height of step we can "move up" without interaction
                 + new Vector3(0, 0.01f / 2, 0),                         // + half of Gizmo cube height -> bottom of gizmo is aligned with stepOffset
                 new Vector3(
-                    2 * characterController.radius, 
-                    0.01f, 
+                    2 * characterController.radius,
+                    0.01f,
                     2 * characterController.radius
                 )
                 );
