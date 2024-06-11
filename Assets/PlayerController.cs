@@ -45,12 +45,15 @@ public class PlayerController : MonoBehaviour
             if (moveMagnitude > 0)
             {
                 // determine the player's intended direction of travel by rotating myCamera.transform.forward by the
+                // determine the player's intended direction of travel by rotating myCamera.transform.forward by the joystick input angle
                 Vector3 myCameraForwardWorldSpace = Quaternion.AngleAxis(moveAngle, Vector3.up) * ProjectForwardOntoXZPlane(myCamera.transform);
                 float rotationAngle = Vector3.SignedAngle(myCameraForwardWorldSpace, transform.forward, transform.up);
                 float roationSign = -Mathf.Sign(rotationAngle);
 
                 //rotate towards myCameraForwardWorldSpace by the 
                 transform.Rotate(Vector3.up, roationSign * turnSpeed * Time.deltaTime);
+                // move forward
+                characterController.Move(walkSpeed * Time.deltaTime * transform.forward);
             }
 
         }
@@ -60,10 +63,14 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Camera to base movement on")]
     public Camera myCamera;
 
+    [Header("Movement Parameters")]
+    [Tooltip("Walking speed of character (units / sec)")]
+    public float walkSpeed = 2.0f;
     [Tooltip("Turning speed of character (deg / sec)")]
     public float turnSpeed = 90.0f;
 
     // input values
+    // inputActionvalues
     private Vector2 moveInput = Vector2.zero;
     private float moveAngle = 0.0f;
     private float moveMagnitude = 0.0f;
