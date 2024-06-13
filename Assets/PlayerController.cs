@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -37,26 +38,31 @@ public class PlayerController : MonoBehaviour
     {
         inputActions.gameplay.Disable();
     }
-
+    
     private void FixedUpdate()
     {
         if (characterController != null)
         {
+            /* If the player is providing input, rotate towards the direction of the 
+             * input in camera-space and move in the new direction.
+             * - To rotate smoothly, use a Quaternion SLERP function
+             * - To move smoothly, use a damping function to approach the target speed
+             *   scaled by the player's input magnitude */
             if (moveMagnitude > 0)
             {
-                // rotate towards the player's intended direction of travel by rotating
-                // myCamera.transform.forward by the joystick input angle
-                Vector3 myCameraForwardWorldSpace = Quaternion.AngleAxis(moveAngle, Vector3.up) * ProjectForwardOntoXZPlane(myCamera.transform);
-                float rotationAngle = Vector3.SignedAngle(myCameraForwardWorldSpace, transform.forward, transform.up);
-                float roationSign = -Mathf.Sign(rotationAngle);
-                transform.Rotate(Vector3.up, roationSign * turnSpeed * Time.deltaTime);
+                Vector3 directionOfPlayerInput = Quaternion.AngleAxis(moveAngle, Vector3.up) * ProjectForwardOntoXZPlane(myCamera.transform);
+                Quaternion orientationOfPlayerInput = Quaternion.LookRotation(directionOfPlayerInput, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, orientationOfPlayerInput, rotationRatio);
 
-                // move in the new forward direction
-                horizontalSpeed = Mathf.SmoothDamp(horizontalSpeed, walkSpeed * moveMagnitude, ref horizontalAcceleration, WindUpTime);
-                characterController.Move(horizontalSpeed * Time.deltaTime * transform.forward);
+                horizontalSpeed = Mathf.SmoothDamp(horizontalSpeed, walkSpeed * moveMagnitude, ref horizontalAcceleration, speedUpTime);
             }
+            else
+            {
+                horizontalSpeed = Mathf.SmoothDamp(horizontalSpeed, 0.0f, ref horizontalAcceleration, stopTime);
+            }
+            characterController.Move(horizontalSpeed * Time.deltaTime * transform.forward);
 
-            // apply gravity regardless of player input
+            /* Always apply gravity, regardless of player input */
             if (characterController.isGrounded && verticalVelocity < 0.0f) verticalVelocity = 0.0f;
             else verticalVelocity += gravity;
             characterController.Move(verticalVelocity * Vector3.up * Time.deltaTime);
@@ -69,12 +75,15 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement Parameters")]
     [Tooltip("Walking speed of character (units / sec)")]
-    public float walkSpeed = 2.0f;
-    [Tooltip("Amount of time it takes to reach full walk/run speed (sec)")]
-    public float WindUpTime = 0.5f;
-    [Tooltip("Turning speed of character (deg / sec)")]
-    public float turnSpeed = 90.0f;
-    [Tooltip("Gravitational Constant (units / sec / sec")]
+    public float walkSpeed = 5.0f;
+    [Tooltip("Amount of time it takes to reach full walk / run speed (sec)")]
+    public float speedUpTime = 0.2f;
+    [Tooltip("Time it takes for the character to stop when the joystick is released (sec)")]
+    public float stopTime = 0.1f;
+    // TODO: IMPLEMENT THIS IN TERMS OF TIME BY SCALING WITH TIME.DELTATIME
+    [Tooltip("Portion of the rotatin between curent and desired orientation to apply each physics update"), Range(0, 1.0f)]
+    public float rotationRatio = 0.2f;
+    [Tooltip("Gravitational Constant (units / sec / sec)")]
     public float gravity = -10.0f;
 
     // inputActionvalues
