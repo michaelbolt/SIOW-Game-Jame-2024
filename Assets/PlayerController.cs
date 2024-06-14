@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
              *   scaled by the player's input magnitude */
             if (moveMagnitude > 0)
             {
-                Vector3 directionOfPlayerInput = Quaternion.AngleAxis(moveAngle, Vector3.up) * ProjectForwardOntoXZPlane(myCamera.transform);
+                Vector3 directionOfPlayerInput = Quaternion.AngleAxis(moveAngle, Vector3.up) * MyUtils.ProjectForwardOntoXZPlane(myCamera.transform);
                 Quaternion orientationOfPlayerInput = Quaternion.LookRotation(directionOfPlayerInput, Vector3.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, orientationOfPlayerInput, rotationRatio);
 
@@ -95,21 +95,6 @@ public class PlayerController : MonoBehaviour
     private float verticalVelocity = 0.0f;
     private float horizontalSpeed = 0.0f;
     private float horizontalAcceleration = 0.0f;
-
-    /// <summary>
-    /// Project the provided <c>Transform</c>'s <c>forward</c> vector onto the World-space X-Z plane.
-    /// </summary>
-    /// <param name="objTransform"><c>Transform</c> object to project onto X-Z plane.</param>
-    /// <returns></returns>
-    private Vector3 ProjectForwardOntoXZPlane(Transform objTransform)
-    {
-        // project myCamera.forward into world space
-        Vector3 myCameraForward = myCamera.transform.TransformDirection(Vector3.forward);
-        myCameraForward.y = 0;  // clear y component
-        myCameraForward.Normalize();  // normalize onto x-z plane
-
-        return myCameraForward;
-    }
     #endregion
 
     #region GIZMOS
