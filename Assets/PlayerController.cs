@@ -41,13 +41,56 @@ public class PlayerController : MonoBehaviour
     
     private void FixedUpdate()
     {
+        ApplyMotion();
+    }
+    #region Movement
+    [Header("Player Movement")]
+
+    [Tooltip("Camera to perform player motion relative to")]
+    public Camera myCamera;
+    [Tooltip("Walking speed of character (units / sec)")]
+    public float walkSpeed = 5.0f;
+    [Tooltip("Amount of time it takes to reach full walk / run speed (sec)")]
+    public float speedUpTime = 0.2f;
+    [Tooltip("Time it takes for the character to stop when the joystick is released (sec)")]
+    public float stopTime = 0.1f;
+    // TODO: IMPLEMENT THIS IN TERMS OF TIME BY SCALING WITH TIME.DELTATIME
+    [Tooltip("Portion of the rotatin between curent and desired orientation to apply each physics update"), Range(0, 1.0f)]
+    public float rotationRatio = 0.2f;
+    [Tooltip("Gravitational Constant (units / sec / sec)")]
+    public float gravity = -10.0f;
+
+    // motion values
+    private float verticalVelocity = 0.0f;
+    private float horizontalSpeed = 0.0f;
+    private float horizontalAcceleration = 0.0f;
+
+    /// <summary>
+    /// Apply motion to the GameObject based on player input, the current camera 
+    /// orientation, and gravity.
+    /// </summary>
+    /// <remarks>
+    /// <list type="bullet">
+    /// <item>
+    /// Motion is performed by first rotating the object towards the direction of player 
+    /// input (relative to the current camera view) <em>then</em> moving along that 
+    /// direction.
+    /// </item>
+    /// <item>
+    /// Rotation is achieved by using a spherical linear-interpolation (SLERP) between 
+    /// the current object orientation Quaternion and the "dired direction of travel"
+    /// Quaternion.
+    /// </item>
+    /// <item>
+    /// Forward motion is achieved using a smooth-damping function to approach the 
+    /// maximum walking speed scaled by the player's input.
+    /// </item>
+    /// </list>
+    /// </remarks>
+    private void ApplyMotion()
+    {
         if (characterController != null)
         {
-            /* If the player is providing input, rotate towards the direction of the 
-             * input in camera-space and move in the new direction.
-             * - To rotate smoothly, use a Quaternion SLERP function
-             * - To move smoothly, use a damping function to approach the target speed
-             *   scaled by the player's input magnitude */
             if (moveMagnitude > 0)
             {
                 Vector3 directionOfPlayerInput = Quaternion.AngleAxis(moveAngle, Vector3.up) * MyUtils.ProjectForwardOntoXZPlane(myCamera.transform);
@@ -68,33 +111,6 @@ public class PlayerController : MonoBehaviour
             characterController.Move(verticalVelocity * Vector3.up * Time.deltaTime);
         }
     }
-
-    #region Movement
-    [Tooltip("Camera to base movement on")]
-    public Camera myCamera;
-
-    [Header("Movement Parameters")]
-    [Tooltip("Walking speed of character (units / sec)")]
-    public float walkSpeed = 5.0f;
-    [Tooltip("Amount of time it takes to reach full walk / run speed (sec)")]
-    public float speedUpTime = 0.2f;
-    [Tooltip("Time it takes for the character to stop when the joystick is released (sec)")]
-    public float stopTime = 0.1f;
-    // TODO: IMPLEMENT THIS IN TERMS OF TIME BY SCALING WITH TIME.DELTATIME
-    [Tooltip("Portion of the rotatin between curent and desired orientation to apply each physics update"), Range(0, 1.0f)]
-    public float rotationRatio = 0.2f;
-    [Tooltip("Gravitational Constant (units / sec / sec)")]
-    public float gravity = -10.0f;
-
-    // inputActionvalues
-    private Vector2 moveInput = Vector2.zero;
-    private float moveAngle = 0.0f;
-    private float moveMagnitude = 0.0f;
-
-    // motion values
-    private float verticalVelocity = 0.0f;
-    private float horizontalSpeed = 0.0f;
-    private float horizontalAcceleration = 0.0f;
     #endregion
 
     #region GIZMOS
