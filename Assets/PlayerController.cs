@@ -4,22 +4,52 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    private InputActions inputActions;
-    private CharacterController characterController;
-
-    // Awake is called when the script is first loaded
+    #region UNITY_LIFECYCLE
+    // called when script instance is first loaded
     private void Awake()
     {
-        inputActions = new InputActions();
-        characterController = GetComponent<CharacterController>();
+        OnAwakeGetCharacterController();
+        OnAwakeBindInputs();
+    }
 
-        // store move input when performed
+    // called when GameObject is enabled
+    private void OnEnable()
+    {
+        inputActions.gameplay.Enable();
+    }
+
+    // called when GameObject is disabled
+    private void OnDisable()
+    {
+        inputActions.gameplay.Disable();
+    }
+    
+    // called on every Physics update
+    private void FixedUpdate()
+    {
+        ApplyMotion();
+    }
+    #endregion
+
+    #region PLAYER_INPUT
+    private InputActions inputActions;
+    private Vector2 moveInput = Vector2.zero;
+    private float moveAngle = 0.0f;
+    private float moveMagnitude = 0.0f;
+
+    /// <summary>
+    /// Instantiate the <c>InputActions</c> class and bind callbacks to store the 
+    /// current state of player input on changes.
+    /// </summary>
+    /// /// <remarks>Must be called during <c>OnAwake()</c></remarks>
+    private void OnAwakeBindInputs()
+    {
+        inputActions = new InputActions();
         inputActions.gameplay.move.performed += context =>
         {
             moveInput = context.ReadValue<Vector2>();
             moveAngle = -Vector2.SignedAngle(Vector2.up, moveInput);
             moveMagnitude = moveInput.magnitude;
-            //Debug.Log(moveInput + " -> " + moveMagnitude + " @ " + moveAngle);
         };
         inputActions.gameplay.move.canceled += context =>
         {
@@ -29,21 +59,9 @@ public class PlayerController : MonoBehaviour
         };
     }
 
-    private void OnEnable()
-    {
-        inputActions.gameplay.Enable();
-    }
+    #endregion
 
-    private void OnDisable()
-    {
-        inputActions.gameplay.Disable();
-    }
-    
-    private void FixedUpdate()
-    {
-        ApplyMotion();
-    }
-    #region Movement
+    #region PLAYER_MOVEMENT
     [Header("Player Movement")]
 
     [Tooltip("Camera to perform player motion relative to")]
@@ -60,10 +78,20 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Gravitational Constant (units / sec / sec)")]
     public float gravity = -10.0f;
 
-    // motion values
+    private CharacterController characterController;
     private float verticalVelocity = 0.0f;
     private float horizontalSpeed = 0.0f;
     private float horizontalAcceleration = 0.0f;
+
+    /// <summary>
+    /// Get a reference to the GameObject's <c>Charactercontroller</c> <c>Component</c>
+    /// for use
+    /// </summary>
+    /// <remarks>Must be called during <c>OnAwake()</c></remarks>
+    private void OnAwakeGetCharacterController()
+    {
+        characterController = GetComponent<CharacterController>();
+    }
 
     /// <summary>
     /// Apply motion to the GameObject based on player input, the current camera 
@@ -141,6 +169,5 @@ public class PlayerController : MonoBehaviour
                 );
         }
     }
-
     #endregion
 }
