@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     /// Instantiate the <c>InputActions</c> class and bind callbacks to store the 
     /// current state of player input on changes.
     /// </summary>
-    /// /// <remarks>Must be called during <c>OnAwake()</c></remarks>
+    /// <remarks>Must be called during <c>OnAwake()</c></remarks>
     private void OnAwakeBindInputs()
     {
         inputActions = new InputActions();
@@ -73,10 +73,10 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Time it takes for the character to stop when the joystick is released (sec)")]
     public float stopTime = 0.1f;
     // TODO: IMPLEMENT THIS IN TERMS OF TIME BY SCALING WITH TIME.DELTATIME
-    [Tooltip("Portion of the rotatin between curent and desired orientation to apply each physics update"), Range(0, 1.0f)]
+    [Tooltip("Portion of the rotation between current and desired orientation to apply each physics update"), Range(0, 1.0f)]
     public float rotationRatio = 0.2f;
     [Tooltip("Gravitational Constant (units / sec / sec)")]
-    public float gravity = -10.0f;
+    public float gravity = -0.3f;
 
     private CharacterController characterController;
     private float verticalVelocity = 0.0f;
@@ -106,7 +106,7 @@ public class PlayerController : MonoBehaviour
     /// </item>
     /// <item>
     /// Rotation is achieved by using a spherical linear-interpolation (SLERP) between 
-    /// the current object orientation Quaternion and the "dired direction of travel"
+    /// the current object orientation Quaternion and the "desired direction of travel"
     /// Quaternion.
     /// </item>
     /// <item>
@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour
             /* Always apply gravity, regardless of player input */
             if (characterController.isGrounded && verticalVelocity < 0.0f) verticalVelocity = 0.0f;
             else verticalVelocity += gravity;
-            characterController.Move(verticalVelocity * Vector3.up * Time.deltaTime);
+            characterController.Move(verticalVelocity * Time.deltaTime * Vector3.up );
         }
     }
     #endregion
