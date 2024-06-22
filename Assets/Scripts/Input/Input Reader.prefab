@@ -46,3 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameplayMoveEvent: {fileID: 11400000, guid: a6730a6ffb0a5444e827050e5483042a, type: 2}
   gameplayLookEvent: {fileID: 11400000, guid: 7b3f121a0eb5eb244b5905a7d9c5771f, type: 2}
+  gameplayInteractPressed: {fileID: 11400000, guid: ae38e81732c093f44827829ea9267c07,
+    type: 2}
+  gameplayInteractReleased: {fileID: 11400000, guid: de79dd884ac93124d8ff05b1aeb1704d,
+    type: 2}
