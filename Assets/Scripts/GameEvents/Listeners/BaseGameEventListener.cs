@@ -11,12 +11,12 @@ public abstract class BaseGameEventListener<T, E, UER> : MonoBehaviour,
 {
 
     /// <summary><c>BaseGameEvent</c> child type that we are listening for.</summary>
-    [Header("Game Event to listen for")]
+    [Tooltip("Game Event to listen for")]
     [SerializeField] private E gameEvent;
     public E GameEvent {  get { return gameEvent; } set { gameEvent = value; } }
 
 
-    [Header("Unity Event to call when the linked `GameEvent` is raised")]
+    [Tooltip("Unity Event to call when the linked Game Event is raised")]
     [SerializeField] private UER unityEventResponse;
 
     /// <summary>
