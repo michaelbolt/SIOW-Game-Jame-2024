@@ -15,6 +15,8 @@ public class InputActionsReader : MonoBehaviour
     [Header("Gameplay Action Map")]
     public Vector2GameEvent gameplayMoveEvent;
     public Vector2GameEvent gameplayLookEvent;
+    public VoidGameEvent gameplayInteractPressed;
+    public VoidGameEvent gameplayInteractReleased;
     
     private InputActions inputActions;
 
@@ -27,6 +29,8 @@ public class InputActionsReader : MonoBehaviour
         inputActions.gameplay.move.canceled += OnMoveCancelled;
         inputActions.gameplay.look.performed += OnLookPerformed;
         inputActions.gameplay.look.canceled += OnLookCancelled;
+        inputActions.gameplay.interact.performed += OnInteractPressed;
+        inputActions.gameplay.interact.canceled += OnInteractReleased;
 
     }
 
@@ -55,7 +59,7 @@ public class InputActionsReader : MonoBehaviour
     /// <summary>
     /// Callback to perform when the <c>gameplay.move</c> action is canceled - this 
     /// occurs when the player releases the stick to the neutral position.
-    /// </summary
+    /// </summary>
     private void OnMoveCancelled(InputAction.CallbackContext context)
     {
         gameplayMoveEvent.Raise(Vector2.zero);
@@ -74,10 +78,16 @@ public class InputActionsReader : MonoBehaviour
     /// <summary>
     /// Callback to perform when the <c>gameplay.look</c> action is canceled - this 
     /// occurs when the player releases the stick to the neutral position.
-    /// </summary
+    /// </summary>
     private void OnLookCancelled(InputAction.CallbackContext context)
     {
         gameplayLookEvent.Raise(Vector2.zero);
     }
+
+    /// <summary>Callback to perform when the <c>gameplay.action</c> action is pressed.</summary>
+    private void OnInteractPressed(InputAction.CallbackContext _context) { gameplayInteractPressed.Raise(); }
+
+    /// <summary>Callback to perform when the <c>gameplay.action</c> action is released.</summary>
+    private void OnInteractReleased(InputAction.CallbackContext _context) { gameplayInteractReleased.Raise(); }
     #endregion
 }
