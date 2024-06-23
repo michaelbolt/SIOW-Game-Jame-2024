@@ -14,5 +14,7 @@ public class InteractableTest : MonoBehaviour, IInteractable
 
     public void Deselect() { gameObject.GetComponent<Renderer>().material.color = Color.cyan; }
 
-    public void Interact() { Debug.Log("INTERACTED WITH: " + gameObject.name); }
+    public void InteractPressed() { Debug.Log("INTERACTED WITH: " + gameObject.name); }
+
+    public void InteractReleased() { Debug.Log("RELEASED!"); }
 }

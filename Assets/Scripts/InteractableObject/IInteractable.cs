@@ -40,5 +40,10 @@ public interface IInteractable
     /// Called when the <c>Interactor</c> pressed the interact button <em>and</em> this 
     /// object is selected.
     /// </summary>
-    public void Interact();
+    public void InteractPressed();
+
+    /// <summary>
+    /// Called when the <c>Interactor</c> releases the interact button.
+    /// </summary>
+    public void InteractReleased();
 }

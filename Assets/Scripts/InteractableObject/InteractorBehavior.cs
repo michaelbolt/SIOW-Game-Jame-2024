@@ -89,7 +89,9 @@ public class InteractorBehavior : MonoBehaviour
         }
     }
 
-    /// <summary>Called <c>.Interact()</c> on the currently selected object.</summary>
-    public void OnInteractPressed() { selected?.Interact(); }
+    /// <summary>Called <c>.InteractPressed()</c> on the currently selected object.</summary>
+    public void OnInteractPressed() { selected?.InteractPressed(); }
+
+    public void OnInteractReleased() { selected?.InteractReleased(); }
 }
 
