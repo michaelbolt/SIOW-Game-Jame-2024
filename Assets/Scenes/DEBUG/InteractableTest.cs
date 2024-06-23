@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InteractableTest : MonoBehaviour, IInteractable
 {
+    public List<Collider> colliders;
 
     public void Focus() { gameObject.GetComponent<Renderer>().material.color = Color.cyan; }
 
@@ -13,5 +14,5 @@ public class InteractableTest : MonoBehaviour, IInteractable
 
     public void Deselect() { gameObject.GetComponent<Renderer>().material.color = Color.cyan; }
 
-    public void Interact() { Debug.Log("INTERACT!"); }
+    public void Interact() { Debug.Log("INTERACTED WITH: " + gameObject.name); }
 }

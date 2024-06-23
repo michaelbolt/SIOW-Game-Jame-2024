@@ -602,6 +602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61b85c67cac747a4f9d36d5dbf4b7980, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colliders: []
 --- !u!65 &727006989
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -827,6 +828,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61b85c67cac747a4f9d36d5dbf4b7980, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colliders: []
 --- !u!1 &932087129 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9181843396180937362, guid: 6dfc905d9ffd461469818abcd6e4d1a1,
@@ -845,6 +847,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feef6437dcbf0974d854c5ab89509a75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  focusLayerName: Interaction Focus
+  selectLayerName: Interaction Select
 --- !u!1 &1237449664
 GameObject:
   m_ObjectHideFlags: 0
@@ -1260,6 +1264,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61b85c67cac747a4f9d36d5dbf4b7980, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colliders:
+  - {fileID: 1458812786}
 --- !u!65 &1795211098
 BoxCollider:
   m_ObjectHideFlags: 0
