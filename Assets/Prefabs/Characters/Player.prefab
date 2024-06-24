@@ -850,6 +850,10 @@ GameObject:
   - component: {fileID: 7098465021725597805}
   - component: {fileID: 7683862674400567992}
   - component: {fileID: 5688941277401338440}
+  - component: {fileID: 8250817851190038143}
+  - component: {fileID: 2539067301708898617}
+  - component: {fileID: 6723683036344627442}
+  - component: {fileID: 2189954533753255209}
   m_Layer: 0
   m_Name: Player Object
   m_TagString: Untagged
@@ -912,12 +916,109 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dcb3bd755dca09438eb7d02592d0c22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myCamera: {fileID: 0}
   walkSpeed: 5
   speedUpTime: 0.2
   stopTime: 0.1
   rotationRatio: 0.2
-  gravity: -10
+  gravity: -0.3
+--- !u!114 &8250817851190038143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9181843396180937362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e5cd19eefce11a439148edf3e0fb541, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: a6730a6ffb0a5444e827050e5483042a, type: 2}
+  unityEventResponse:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5688941277401338440}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnMoveEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2539067301708898617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9181843396180937362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 589c5e8c50f036a4a8bb5723aa1028f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  focusLayer: {fileID: 11400000, guid: a15affc9c40ef544ba513c73f029dccb, type: 2}
+  selectLayer: {fileID: 11400000, guid: 6c6673fb3b295f04490094893e8e524e, type: 2}
+--- !u!114 &6723683036344627442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9181843396180937362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1d976b86b40ea847a0a8b4dbcd53248, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: ae38e81732c093f44827829ea9267c07, type: 2}
+  unityEventResponse:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2539067301708898617}
+        m_TargetAssemblyTypeName: InteractorBehavior, Assembly-CSharp
+        m_MethodName: OnInteractPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2189954533753255209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9181843396180937362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1d976b86b40ea847a0a8b4dbcd53248, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: de79dd884ac93124d8ff05b1aeb1704d, type: 2}
+  unityEventResponse:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2539067301708898617}
+        m_TargetAssemblyTypeName: InteractorBehavior, Assembly-CSharp
+        m_MethodName: OnInteractReleased
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &4998572386500069103
 PrefabInstance:
   m_ObjectHideFlags: 0

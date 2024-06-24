@@ -1,71 +1,43 @@
 using UnityEditor;
 using UnityEngine;
 
+[RequireComponent(typeof(Vector2GameEventListener), typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
 
     #region UNITY_LIFECYCLE
-    // called when script instance is first loaded
-    private void Awake()
-    {
-        OnAwakeGetCharacterController();
-        OnAwakeBindInputs();
-    }
+    // required Components
+    private Camera myCamera;
+    private CharacterController characterController;
 
-    // called when GameObject is enabled
-    private void OnEnable()
-    {
-        inputActions.gameplay.Enable();
-    }
+    /// <summary>Gets the <c>CharacterController</c> Component when instance is loaded.</summary>
+    private void Awake() { characterController = GetComponent<CharacterController>(); }
 
-    // called when GameObject is disabled
-    private void OnDisable()
-    {
-        inputActions.gameplay.Disable();
-    }
-    
-    // called on every Physics update
-    private void FixedUpdate()
-    {
-        ApplyMotion();
-    }
+    /// <summary>Get Scene Main camera before first frame is drawn.</summary>
+    private void Start() { myCamera = Camera.main; }
+
+
+    /// <summary>Applies motion on every Physics update.</summary>
+    private void FixedUpdate() { ApplyMotion();}
     #endregion
 
     #region PLAYER_INPUT
-    private InputActions inputActions;
     private Vector2 moveInput = Vector2.zero;
     private float moveAngle = 0.0f;
     private float moveMagnitude = 0.0f;
 
-    /// <summary>
-    /// Instantiate the <c>InputActions</c> class and bind callbacks to store the 
-    /// current state of player input on changes.
-    /// </summary>
-    /// <remarks>Must be called during <c>OnAwake()</c></remarks>
-    private void OnAwakeBindInputs()
+    /// <summary>Callback to be triggered when player <c>move</c> input changes</summary>
+    public void OnMoveEvent(Vector2 playerInput)
     {
-        inputActions = new InputActions();
-        inputActions.gameplay.move.performed += context =>
-        {
-            moveInput = context.ReadValue<Vector2>();
-            moveAngle = -Vector2.SignedAngle(Vector2.up, moveInput);
-            moveMagnitude = moveInput.magnitude;
-        };
-        inputActions.gameplay.move.canceled += context =>
-        {
-            moveInput = Vector2.zero;
-            moveAngle = 0.0f;
-            moveMagnitude = 0.0f;
-        };
+        moveInput = playerInput;
+        moveAngle = -Vector2.SignedAngle(Vector2.up, moveInput);
+        moveMagnitude = moveInput.magnitude;
     }
-
     #endregion
 
     #region PLAYER_MOVEMENT
     [Header("Player Movement")]
 
-    [Tooltip("Camera to perform player motion relative to")]
-    public Camera myCamera;
     [Tooltip("Walking speed of character (units / sec)")]
     public float walkSpeed = 5.0f;
     [Tooltip("Amount of time it takes to reach full walk / run speed (sec)")]
@@ -78,20 +50,10 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Gravitational Constant (units / sec / sec)")]
     public float gravity = -0.3f;
 
-    private CharacterController characterController;
     private float verticalVelocity = 0.0f;
     private float horizontalSpeed = 0.0f;
     private float horizontalAcceleration = 0.0f;
 
-    /// <summary>
-    /// Get a reference to the GameObject's <c>Charactercontroller</c> <c>Component</c>
-    /// for use
-    /// </summary>
-    /// <remarks>Must be called during <c>OnAwake()</c></remarks>
-    private void OnAwakeGetCharacterController()
-    {
-        characterController = GetComponent<CharacterController>();
-    }
 
     /// <summary>
     /// Apply motion to the GameObject based on player input, the current camera 
