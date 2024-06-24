@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fb2ac95e7d8879b47aa5d23ff09531ea, type: 3}
-  m_Name: InteractionSelect
+  m_Name: InteractionFocusSO
   m_EditorClassIdentifier: 
-  layerName: Interaction Select
-  layerIndex: 11
+  layerName: Interaction Focus
+  layerIndex: 10
