@@ -6,18 +6,26 @@ using UnityEngine.Events;
 /// <summary>
 /// When the inspector-linked <c>GameEvent</c> is raised, call the linked <c>UnityEvent</c>.
 /// </summary>
-public abstract class BaseGameEventListener<T, E, UER> : MonoBehaviour, 
-    IGameEventListener<T> where E : BaseGameEvent<T> where UER : UnityEvent<T>
+public abstract class BaseGameEventListener<T, GE, UE> : MonoBehaviour, 
+    IGameEventListener<T> where GE : BaseGameEvent<T> where UE : UnityEvent<T>
 {
 
     /// <summary><c>BaseGameEvent</c> child type that we are listening for.</summary>
     [Tooltip("Game Event to listen for")]
-    [SerializeField] private E gameEvent;
-    public E GameEvent {  get { return gameEvent; } set { gameEvent = value; } }
+    [SerializeField] private GE gameEvent;
+    public GE GameEvent 
+    {
+        get { return gameEvent; }
+        set {
+            if (gameObject.activeInHierarchy) gameEvent?.UnregisterListener(this);
+            gameEvent = value;
+            if (gameObject.activeInHierarchy) gameEvent?.RegisterListener(this);
+        } 
+    }
 
 
     [Tooltip("Unity Event to call when the linked Game Event is raised")]
-    [SerializeField] private UER unityEventResponse;
+    [SerializeField] private UE unityEventResponse;
 
     /// <summary>
     /// Register this listener to the target <c>GameEvent</c> (if set) when enabled.
