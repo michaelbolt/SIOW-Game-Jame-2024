@@ -22,6 +22,7 @@ public class GhostModelMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // FIXME: this needs to use LOCAL SPACE, not WORLD SPACE positiosn!
         modelOffset = Mathf.Cos(2.0f * Mathf.PI * bobFrequency * Time.time) * bobHeight;
         transform.position = new Vector3(transform.position.x, modelPosition + modelOffset, transform.position.z);
     }
