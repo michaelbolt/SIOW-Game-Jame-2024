@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 865715786366953487}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.016197588, y: 0.98314804, z: 0.109396875, w: -0.14556748}
+  m_LocalRotation: {x: 0.016197583, y: 0.98314804, z: 0.10939687, w: -0.14556745}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -135,7 +135,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3787734783130239867}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.018835727, y: 0.9810016, z: 0.12721461, w: -0.14524965}
+  m_LocalRotation: {x: 0.018835725, y: 0.9810017, z: 0.12721461, w: -0.14524966}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -850,6 +850,7 @@ GameObject:
   - component: {fileID: 7098465021725597805}
   - component: {fileID: 7683862674400567992}
   - component: {fileID: 5688941277401338440}
+  - component: {fileID: 703580854399717007}
   - component: {fileID: 8250817851190038143}
   - component: {fileID: 2539067301708898617}
   - component: {fileID: 6723683036344627442}
@@ -902,7 +903,7 @@ CharacterController:
   m_SlopeLimit: 45
   m_StepOffset: 0.55
   m_SkinWidth: 0.025
-  m_MinMoveDistance: 0.001
+  m_MinMoveDistance: 0
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &5688941277401338440
 MonoBehaviour:
@@ -920,7 +921,38 @@ MonoBehaviour:
   speedUpTime: 0.2
   stopTime: 0.1
   rotationRatio: 0.2
-  gravity: -0.3
+  gravity: -15
+  hoverHeight: 1.1
+  hoverRiseTime: 0.25
+  maxHoverTime: 3
+--- !u!114 &703580854399717007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9181843396180937362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7e78d57bc00bdd49b12281bff67e5f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: ec03e05717c06cc4ebe3b3022eb3b538, type: 2}
+  unityEventResponse:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5688941277401338440}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnJumpEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8250817851190038143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1131,4 +1163,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bobFrequency: 0.6
-  bobHeight: 0.1
+  bobHeight: 0.03
+  bobOffset: 0
