@@ -10,20 +10,13 @@ public class GhostModelMover : MonoBehaviour
     [Tooltip("Vertical offset to apply to bobbing")]
     public float bobOffset = 0.0f;
 
-    private float modelPosition = 0.0f;
     private float modelOffset = 0.0f;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        modelPosition = transform.localPosition.y;
-    }
 
     // Update is called once per frame
     void Update()
     {
-        // FIXME: this needs to use LOCAL SPACE, not WORLD SPACE positiosn!
+        float oldModelOffset = modelOffset;
         modelOffset = Mathf.Cos(2.0f * Mathf.PI * bobFrequency * Time.time) * bobHeight;
-        transform.position = new Vector3(transform.position.x, modelPosition + modelOffset, transform.position.z);
+        transform.position = new Vector3(transform.position.x, transform.position.y - oldModelOffset + modelOffset, transform.position.z);
     }
 }
