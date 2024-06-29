@@ -17,6 +17,7 @@ public class InputActionsReader : MonoBehaviour
     public Vector2GameEvent gameplayLookEvent;
     public VoidGameEvent gameplayInteractPressed;
     public VoidGameEvent gameplayInteractReleased;
+    public BooleanGameEvent gameplayJumpPressed;
     
     private InputActions inputActions;
 
@@ -31,7 +32,8 @@ public class InputActionsReader : MonoBehaviour
         inputActions.gameplay.look.canceled += OnLookCancelled;
         inputActions.gameplay.interact.performed += OnInteractPressed;
         inputActions.gameplay.interact.canceled += OnInteractReleased;
-
+        inputActions.gameplay.jump.performed += OnJumpPressed;
+        inputActions.gameplay.jump.canceled += OnJumpReleased;
     }
 
     private void OnEnable()
@@ -89,5 +91,8 @@ public class InputActionsReader : MonoBehaviour
 
     /// <summary>Callback to perform when the <c>gameplay.action</c> action is released.</summary>
     private void OnInteractReleased(InputAction.CallbackContext _context) { gameplayInteractReleased.Raise(); }
+
+    private void OnJumpPressed(InputAction.CallbackContext _context) { gameplayJumpPressed.Raise(true); }
+    private void OnJumpReleased(InputAction.CallbackContext _context) { gameplayJumpPressed.Raise(false); }
     #endregion
 }

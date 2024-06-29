@@ -50,3 +50,5 @@ MonoBehaviour:
     type: 2}
   gameplayInteractReleased: {fileID: 11400000, guid: de79dd884ac93124d8ff05b1aeb1704d,
     type: 2}
+  gameplayJumpPressed: {fileID: 11400000, guid: ec03e05717c06cc4ebe3b3022eb3b538,
+    type: 2}
