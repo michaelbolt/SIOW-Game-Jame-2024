@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>This class manages the player's horizontal motion (direction facing + speed).</summary>
 public class PlayerHorizontalMotion
 {
     private readonly Camera mainCamera;
