@@ -5,10 +5,13 @@ using UnityEngine;
 
 public class PlayerVerticalMotion
 {
-    private enum JumpState { DEFAULT, IDLE, JUMPING, FLOATING, RELEASED }   // enum for jump state
-    private JumpState currentState = JumpState.DEFAULT;                     // current state for jumping / floating
-    private bool changedState = false;                                      // whether currentState changed this update
-    private float currentStateStartTime;                                    // when we entered the current state
+    private enum JumpState
+    {                                                       // enum for jump state
+        DEFAULT, IDLE, JUMPING, FLOATING, RELEASED, LANDED 
+    }                               
+    private JumpState currentState = JumpState.DEFAULT;     // current state for jumping / floating
+    private bool changedState = false;                      // whether currentState changed this update
+    private float currentStateStartTime;                    // when we entered the current state
 
     private bool jumpPressed = false;           // current state of player jump input
 
@@ -27,7 +30,7 @@ public class PlayerVerticalMotion
     /// <returns></returns>
     public float UpdateVelocity(bool isGrounded, float defaultGravity, float hoverHeight, float hoverRiseTime, float maxHoverTime)
     {
-        ProgressJumpState(isGrounded, maxHoverTime);
+        AdvanceJumpStateMachine(isGrounded, maxHoverTime);
         SetGravityForJumpState(defaultGravity, hoverHeight, hoverRiseTime, maxHoverTime);
 
         // update velocity with current gravity
@@ -38,7 +41,9 @@ public class PlayerVerticalMotion
 
 
     /// <summary>Updates the current jump-state per user input and state.</summary>
-    private void ProgressJumpState(bool isGrounded, float maxHoverTime)
+    /// <param name="isGrounded">Whether the character is currently touching the ground.</param>
+    /// <param name="maxHoverTime">Max amount of time that can be spent in Hover state before falling.</param>
+    private void AdvanceJumpStateMachine(bool isGrounded, float maxHoverTime)
     {
         JumpState nextState = currentState;
 
@@ -68,7 +73,12 @@ public class PlayerVerticalMotion
                 // check for landing
                 goto case JumpState.RELEASED;
             case JumpState.RELEASED:
-                if (isGrounded) { nextState = JumpState.IDLE; }
+                if (isGrounded) { nextState = JumpState.LANDED; }
+                break;
+
+            case JumpState.LANDED:
+                // return to IDLE by releasing the button; prevents double jumping
+                if (!jumpPressed) { nextState = JumpState.IDLE; }
                 break;
 
             default:
@@ -109,6 +119,7 @@ public class PlayerVerticalMotion
         {
             default:
             case JumpState.IDLE:
+            case JumpState.LANDED:
                 gravity = defaultGravity;
                 break;
 
