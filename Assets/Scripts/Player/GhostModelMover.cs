@@ -7,8 +7,6 @@ public class GhostModelMover : MonoBehaviour
     public float bobFrequency = 0.7f;
     [Tooltip("Maximum vertical height of bobbing")]
     public float bobHeight = 0.1f;
-    [Tooltip("Vertical offset to apply to bobbing")]
-    public float bobOffset = 0.0f;
 
     private float modelOffset = 0.0f;
 
